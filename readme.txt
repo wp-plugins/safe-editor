@@ -1,8 +1,11 @@
 === Safe Editor ===
+Contributors: 
+Donate link: https://www.paypal.com/us/cgi-bin/webscr?cmd=_flow&SESSION=nIyyyhMYEuiGkrlM9jvdIijCINVW4xHXKQBFh-UGEnQU2K_q5B5cV7qc4vC&dispatch=5885d80a13c0db1f8e263663d3faee8d5402c249c5a2cfd4a145d37ec05e9a5e
 Tags: css changes, javascript chnages, editor, updates
 Requires at least: 3.8
 Tested up to: 3.9.1
 Stable tag: trunk/plugin
+License: GPL2
 
 Add custom css/javascript to your website without worrying that your changes will be overwritten with the future theme/plugin updates.
 
@@ -32,3 +35,15 @@ konrad@forde.pl
 
 
 == Upgrade Notice ==
+
+
+== Frequently Asked Questions ==
+
+1. I installed the Safe Editor, where can I edit the css & javascript?
+    - The Safe Editor settings panel is located under Tools/Safe Editor in your WordPress admin panel.
+
+2. The javascript I write in the editor is not being executed. Why?
+    - Make sure you have the wp_footer() hook in your footer.php file (in your theme).
+
+3. I'm geting the '$ is not defined' error on frontend when I use the  javascript editor.
+     - If you are writing jQuery in the javascript editor make sure you wrap it in 'jQuery(document).ready(function( $ ) { YOURCODE });"
