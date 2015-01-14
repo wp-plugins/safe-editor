@@ -27,6 +27,10 @@
     display: block; }
   .safe_editor_wrapper .CodeMirror {
     border: 1px solid #ddd;
+    font-size:16px;
+    line-height:20px;
+    height:800px;
+    font-family: "Courier New";
     margin-bottom: 20px; }
   .safe_editor_wrapper .button {
     float: right; }

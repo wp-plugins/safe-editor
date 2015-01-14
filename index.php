@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Safe Editor
-Plugin URI: 	
-Description: Safe Editor allows you to write custom CSS / Javascript to manipulate the appearance and behavior of themes / plugins on your website without worrying that your changes will be overwritten with the future theme / plugin updates. 
-Version: 1.0
+Plugin URI:
+Description: Safe Editor allows you to write custom CSS / Javascript to manipulate the appearance and behavior of themes / plugins on your website without worrying that your changes will be overwritten with the future theme / plugin updates.
+Version: 1.1
 Author: Konrad Węgrzyniak
 Author URI: http://forde.pl/
 License: GPL2
@@ -15,6 +15,12 @@ class se_options_page {
 		add_action('init', array( $this, 'save_edit_init') );
 
 		if(!wp_script_is('jquery')) wp_enqueue_script('jquery',false,array(),false, true);
+
+    	wp_enqueue_style('codemirror-theme-ambiance', plugins_url('/theme/ambiance.css', __FILE__));
+    	wp_enqueue_style('codemirror-theme-monokai', plugins_url('/theme/monokai.css', __FILE__));
+    	wp_enqueue_style('codemirror-theme-solarized', plugins_url('/theme/solarized.css', __FILE__));
+    	wp_enqueue_style('codemirror-theme-tomorrow-night-eighties', plugins_url('/theme/tomorrow-night-eighties.css', __FILE__));
+
     	wp_enqueue_style('codemirror-css', plugins_url('/codemirror/codemirror.css', __FILE__));
     	wp_enqueue_script('codemirror', plugins_url( '/codemirror/codemirror.js', __FILE__ ),array(),false, true);
     	wp_enqueue_script('codemirror-mode-css', plugins_url( '/codemirror/mode/css/css.js', __FILE__ ),array(),false, true);
@@ -43,11 +49,11 @@ class se_options_page {
 
 			<?php ( isset($_GET['tab']) )? $this->se_tabs($_GET['tab']) : $this->se_tabs('css'); ?>
 			<?php $tab = ( isset($_GET['tab']) )? $_GET['tab'] : false; ?>
-			
+
 			<div class="safe_editor_wrapper <?php if($tab == 'css' || !isset($_GET['tab'])) echo 'tab_vis' ?>">
-				<?php 
-					$css = get_option('safe_edit_css'); 
-					$css = ($css)? stripcslashes($css) : ''; 
+				<?php
+					$css = get_option('safe_edit_css');
+					$css = ($css)? stripcslashes($css) : '';
 				?>
 				<p class="se_tab_desc">Your custom css will be added to the <i>&lt;body&gt;</i> tag on your website "front-end" (wrapped in <i>&lt;style&gt;</i> tags).</p>
 				<div id="safe_editor_tab">CSS Editor</div>
@@ -56,9 +62,9 @@ class se_options_page {
 			</div>
 
 			<div class="safe_editor_wrapper <?php if($tab == 'js') echo 'tab_vis' ?>">
-				<?php 
-					$js = get_option('safe_edit_js'); 
-					$js = ($js)? stripcslashes($js) : ''; 
+				<?php
+					$js = get_option('safe_edit_js');
+					$js = ($js)? stripcslashes($js) : '';
 				?>
 				<p class="se_tab_desc">Your custom Javascript will be added to the footer of your website "front-end" (wrapped in <i>&lt;script&gt;</i> tags).</p>
 				<div id="safe_editor_tab">Javascript Editor</div>
@@ -75,21 +81,23 @@ class se_options_page {
 					<img alt="" border="0" src="https://www.paypalobjects.com/pl_PL/i/scr/pixel.gif" width="1" height="1">
 				</form>
 			</div>
-			
 
 
-			
+
+
 			<script type="text/javascript">
-				jQuery(document).ready(function( $ ) {					
+				jQuery(document).ready(function( $ ) {
 					var css_editor = CodeMirror.fromTextArea(document.getElementById("safe_css_editor"), {
 						mode:  "css",
 						indentUnit: 4,
-						lineNumbers: true
+						lineNumbers: true,
+						theme: "solarized light"
 					});
 					var js_editor = CodeMirror.fromTextArea(document.getElementById("safe_js_editor"), {
 						mode:  "javascript",
 			        	indentUnit: 4,
-						lineNumbers: true
+						lineNumbers: true,
+						theme: "solarized light"
 			      	});
 
 
@@ -112,7 +120,7 @@ class se_options_page {
 						} else {
 							textarea = $('.safe_editor_js_textarea');
 							value = js_editor.getValue();
-							saving_js = true;	
+							saving_js = true;
 						}
 
 						t.parent().find('.saving').remove();
@@ -122,14 +130,14 @@ class se_options_page {
 							type: 'POST',
 							url: scriptsajax.ajaxurl,
 							data: {
-								action: 'se_save', 
+								action: 'se_save',
 								type: type,
 								data: value
 							},
 							success: function(data, textStatus, XMLHttpRequest) {
 								t.parent().after(data);
 								t.parent().find('.saving').addClass('saved').fadeOut(4000, function() { $(this).remove() });
-								if(type == 'css') saving_css = false; 
+								if(type == 'css') saving_css = false;
 								if(type == 'js') saving_js = false;
 							},
 							error: function(MLHttpRequest, textStatus, errorThrown) {
@@ -166,12 +174,12 @@ new se_options_page;
 
 
 function se_save() {
-	//echo "<pre>"; print_r($_POST); echo "</pre>"; 
+	//echo "<pre>"; print_r($_POST); echo "</pre>";
 	switch($_POST['type']) {
-		case 'css' : 
+		case 'css' :
 			update_option( 'safe_edit_css', $_POST['data']);
 			break;
-		case 'js' : 
+		case 'js' :
 			update_option( 'safe_edit_js', $_POST['data']);
 			break;
 	}

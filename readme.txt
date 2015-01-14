@@ -30,6 +30,9 @@ konrad@forde.pl
 
 == Change Log ==
 
+= 1.1 =
+* Solarized light theme for css and javascript editor added
+
 = 1.0 =
 * First release.
 
